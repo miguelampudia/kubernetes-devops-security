@@ -21,7 +21,7 @@ pipeline {
     	}
 		stage('Docker Build and Push') {
 	      steps {
-	        withDockerRegistry([credentialsId: "docker-hub"]) {
+	        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
 	          sh 'printenv'
 	          sh 'docker build -t mampudia/numeric-app:""$GIT_COMMIT"" .'
 	          sh 'docker push mampudia/numeric-app:""$GIT_COMMIT""'
