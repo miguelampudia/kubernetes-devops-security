@@ -31,7 +31,9 @@ pipeline {
     	}
     	stage('SonarQube - SAST') {
 	      steps {
-	        sh "mvn sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.host.url=https://sonarqube.ampudiacompany.com -Dsonar.login=sqp_88816b2d5aefee436312fcd23a1e69bbcb4042ec"
+	       withSonarQubeEnv() {
+		      sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
+		    }
 	      }
 	    }
 		stage('Docker Build and Push') {
