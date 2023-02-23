@@ -32,9 +32,7 @@ pipeline {
     	stage('SonarQube - SAST') {
 	      steps {
 	      	withSonarQubeEnv('sonarqube.ampudiacompany') {
-	      		withEnv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']) {
-                   sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-               	}
+            	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
 		    }
 	      }
 	    }
