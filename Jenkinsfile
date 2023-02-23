@@ -32,12 +32,12 @@ pipeline {
       steps {
       	withSonarQubeEnv('sonarqube.ampudiacompany') {
         	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-        	timeout(time: 2, unit: 'MINUTES') {
-          	script {
-            		waitForQualityGate abortPipeline: true
-          		}
-        	}
 	    }
+	    timeout(time: 2, unit: 'MINUTES') {
+        	script {
+            	waitForQualityGate abortPipeline: true
+  			}
+        }
       }
     }
 	stage('Docker Build and Push') {
