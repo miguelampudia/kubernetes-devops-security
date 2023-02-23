@@ -33,7 +33,6 @@ pipeline {
 	      steps {
 	      	withSonarQubeEnv('sonarqube.ampudiacompany') {
 	      		withenv([‘SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
-			    	//run sonarscanner section here
 			    	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
 			    }
 		    }
