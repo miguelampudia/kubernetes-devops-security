@@ -30,14 +30,16 @@ pipeline {
 	}
 	stage('SonarQube - SAST') {
       steps {
-      	withSonarQubeEnv('sonarqube.ampudiacompany') {
-        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-	    }
-	    timeout(time: 2, unit: 'MINUTES') {
-        	script {
-            	waitForQualityGate abortPipeline: true
-  			}
-        }
+      	withenv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
+			withSonarQubeEnv('sonarqube.ampudiacompany') {
+	        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
+		    }
+		    timeout(time: 2, unit: 'MINUTES') {
+	        	script {
+	            	waitForQualityGate abortPipeline: true
+	  			}
+	        }
+		}
       }
     }
 	stage('Docker Build and Push') {
