@@ -1,5 +1,14 @@
 pipeline {
   agent { label 'maven' }
+  environment {
+    deploymentName = "devsecops"
+    namespaceName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "mampudia/numeric-app:${GIT_COMMIT}"
+    applicationURL = "http://devsecops-demo.eastus.cloudapp.azure.com/"
+    applicationURI = "/increment/99"
+  }
   stages {
   	stage ('Parameters') {
         steps {
@@ -81,14 +90,30 @@ pipeline {
       }
 	}
 		
-	stage('Kubernetes Deployment - DEV') {
+	//stage('Kubernetes Deployment - DEV') {
+    //  steps {
+    //    withKubeConfig([credentialsId: 'kubeconfig']) {
+    //      sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+    //      sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
+    //    }
+    //  }
+	//}
+	stage('K8S Deployment - DEV') {
       steps {
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
-        }
+        parallel(
+          "Deployment": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash /home/jenkins/k8s-deployment.sh"
+            }
+          },
+          "Rollout Status": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash /home/jenkins/k8s-deployment-rollout-status.sh"
+            }
+          }
+        )
       }
-	}
+    }
   }
   post {
     always {
