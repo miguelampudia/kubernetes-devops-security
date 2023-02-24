@@ -5,6 +5,7 @@ pipeline {
         steps {
             echo '---Parameters GIT HUB'
             echo "BRANCH_NAME: ${env.GIT_BRANCH.split("/")[1]}"
+            sh "pwd"
         }
     }
   	stage('Build Artifact') {
