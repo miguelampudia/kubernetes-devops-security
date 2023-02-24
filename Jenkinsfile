@@ -53,14 +53,12 @@ pipeline {
         }
       }
 	}
-	stage('Kubernetes Deployment - DEV') {
-      steps {
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
-        }
+	
+	stage('Public Reports') {
+	  steps {
+      	echo '--- Publicando reportes ---'  
       }
-      post {
+	  post {
 	    always {
 	      junit 'target/surefire-reports/*.xml'
 	      jacoco execPattern: 'target/jacoco.exec'
@@ -76,6 +74,15 @@ pipeline {
 	
 	    // }
 	  }
+	}
+	
+	stage('Kubernetes Deployment - DEV') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
+        }
+      }
 	}
   }  
 }
