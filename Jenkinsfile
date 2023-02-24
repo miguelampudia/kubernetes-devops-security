@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent { label 'maven' }
   stages {
   	stage('Build Artifact') {
         steps {
@@ -30,9 +30,16 @@ pipeline {
 	}
 	stage('SonarQube - SAST') {
       steps {
-      	withSonarQubeEnv('sonarqube.ampudiacompany') {
-        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-	    }
+      	withEnv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
+			withSonarQubeEnv('sonarqube.ampudiacompany') {
+	        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
+		    }
+		    timeout(time: 2, unit: 'MINUTES') {
+	        	script {
+	            	waitForQualityGate abortPipeline: true
+	  			}
+	        }
+		}
       }
     }
 	stage('Docker Build and Push') {
@@ -48,7 +55,7 @@ pipeline {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
           sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
         }
       }
 	}   
