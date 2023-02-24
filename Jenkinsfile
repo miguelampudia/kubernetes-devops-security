@@ -61,8 +61,8 @@ pipeline {
         }
       }
 	}
-	stage ('Public Reports') {
-	 post {
+	stage('Public Reports') {
+	  post {
 	    always {
 	      junit 'target/surefire-reports/*.xml'
 	      jacoco execPattern: 'target/jacoco.exec'
