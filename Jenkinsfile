@@ -55,6 +55,9 @@ pipeline {
           },
           "Trivy Scan": {
             sh "bash /home/jenkins/trivy-docker-image-scan.sh"
+          },
+          "OPA Conftest": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy /home/jenkins/opa-docker-security.rego Dockerfile'
           }
         )
       }
