@@ -41,7 +41,6 @@ pipeline {
         }
       }
     }
-    
 
     stage('Vulnerability Scan - Docker') {
       agent { 
@@ -57,8 +56,11 @@ pipeline {
           },
           "OPA Conftest": {
           	sh 'cp /home/jenkins/opa-docker-security.rego $(pwd)/opa-docker-security.rego'
-          	sh 'cd $(pwd)'
             sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+          }
+          "vulnerability scan  -kubernetes": {
+          	sh 'cp /home/jenkins/opa-k8s-security.rego $(pwd)/opa-k8s-security.rego'
+          	sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
           }
         )
       }
@@ -68,7 +70,7 @@ pipeline {
         }
       }
     }
-    
+        
 	stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
