@@ -58,27 +58,7 @@ pipeline {
         }
       }
 	}
-	
-	stage('Public Reports') {
-	  steps {
-      	echo '--- Publicando reportes ---'  
-      }
-	  post {
-	    always {
-	      junit 'target/surefire-reports/*.xml'
-	      jacoco execPattern: 'target/jacoco.exec'
-	      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-	    }
-	    // success {
-	
-	    // }
-	
-	    // failure {
-	
-	    // }
-	  }
-	}
-	
+		
 	stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
@@ -87,5 +67,19 @@ pipeline {
         }
       }
 	}
+  }
+  post {
+    always {
+      junit 'target/surefire-reports/*.xml'
+      jacoco execPattern: 'target/jacoco.exec'
+      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+    }
+    // success {
+
+    // }
+
+    // failure {
+
+    // }
   }  
 }
