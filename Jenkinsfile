@@ -49,6 +49,9 @@ pipeline {
     // }
 
     stage('Vulnerability Scan - Docker') {
+      agent { 
+      	label 'builnode'
+      }
       steps {
         parallel(
           "Dependency Scan": {
@@ -58,7 +61,7 @@ pipeline {
             sh "bash /home/jenkins/trivy-docker-image-scan.sh"
           },
           "OPA Conftest": {
-          	sh 'cp /home/jenkins/opa-docker-security.rego $(pwd)/opa-docker-security.rego'
+          	sh "pwd"
             sh 'sudo docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
           }
         )
