@@ -124,26 +124,24 @@ pipeline {
         )
       }
     }
+     #stage('Integration Tests - DEV') {
+	  #    steps {
+	  #      script {
+	  #        try {
+	  #          withKubeConfig([credentialsId: 'kubeconfig']) {
+	  #            sh "bash /home/jenkins/integration-test.sh"
+	  #          }
+	  #        } catch (e) {
+	  #          withKubeConfig([credentialsId: 'kubeconfig']) {
+	  #            sh "kubectl -n $imageName rollout undo deploy ${deploymentName}"
+	  #          }
+	  #          throw e
+	  #        }
+	  #      }
+	  #    }
+	  #  }
+	  #}
   }
-  
-  #stage('Integration Tests - DEV') {
-  #    steps {
-  #      script {
-  #        try {
-  #          withKubeConfig([credentialsId: 'kubeconfig']) {
-  #            sh "bash /home/jenkins/integration-test.sh"
-  #          }
-  #        } catch (e) {
-  #          withKubeConfig([credentialsId: 'kubeconfig']) {
-  #            sh "kubectl -n $imageName rollout undo deploy ${deploymentName}"
-  #          }
-  #          throw e
-  #        }
-  #      }
-  #    }
-  #  }
-  #}
-  
   post {
     always {
       junit 'target/surefire-reports/*.xml'
