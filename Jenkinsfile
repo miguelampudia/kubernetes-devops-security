@@ -1,6 +1,12 @@
 pipeline {
   agent { label 'maven' }
   stages {
+  	stage ('Parameters') {
+        steps {
+            echo '---Parameters GIT HUB'
+            echo "BRANCH_NAME: ${env.GIT_BRANCH.split("/")[1]}"
+        }
+    }
   	stage('Build Artifact') {
         steps {
           sh "mvn clean package -DskipTests=true"
