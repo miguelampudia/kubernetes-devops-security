@@ -49,9 +49,9 @@ pipeline {
     // }
 
     stage('Vulnerability Scan - Docker') {
-      #agent { 
-      #	label 'builnode'
-      #}
+      //agent { 
+      //	label 'builnode'
+      //}
       steps {
         parallel(
           "Dependency Scan": {
