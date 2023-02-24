@@ -66,10 +66,6 @@ pipeline {
           "OPA Conftest": {
           	sh 'cp /home/jenkins/opa-docker-security.rego $(pwd)/opa-docker-security.rego'
             sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
-          },
-          "vulnerability scan  -kubernetes": {
-          	sh 'cp /home/jenkins/opa-k8s-security.rego $(pwd)/opa-k8s-security.rego'
-          	sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
           }
         )
       }
@@ -89,6 +85,26 @@ pipeline {
         }
       }
 	}
+	
+	
+	
+	stage('Vulnerability Scan - Kubernetes') {
+	  agent { 
+      	label 'builnode'
+      }
+      steps {
+        parallel(
+          "OPA Scan": {
+            sh 'cp /home/jenkins/opa-k8s-security.rego $(pwd)/opa-k8s-security.rego'
+          	sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+          },
+          "Kubesec Scan": {
+            sh "bash /home/jenkins/kubesec-scan.sh"
+          }
+        )
+      }
+    }
+	
 		
 	//stage('Kubernetes Deployment - DEV') {
     //  steps {
@@ -98,6 +114,7 @@ pipeline {
     //    }
     //  }
 	//}
+	
 	stage('K8S Deployment - DEV') {
       steps {
         parallel(
