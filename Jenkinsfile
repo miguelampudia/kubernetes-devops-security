@@ -42,11 +42,6 @@ pipeline {
       }
     }
     
-    //    stage('Vulnerability Scan - Docker ') {
-    //      steps {
-    //         sh "mvn dependency-check:check"   
-    //        }
-    // }
 
     stage('Vulnerability Scan - Docker') {
       agent { 
@@ -66,6 +61,11 @@ pipeline {
             sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
           }
         )
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
       }
     }
     
@@ -92,7 +92,6 @@ pipeline {
     always {
       junit 'target/surefire-reports/*.xml'
       jacoco execPattern: 'target/jacoco.exec'
-      dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
     }
     // success {
 
