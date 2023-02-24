@@ -38,7 +38,7 @@ pipeline {
       steps {
       	withEnv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
 			withSonarQubeEnv('sonarqube.ampudiacompany') {
-	        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
+	        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.branch.name=${env.GIT_BRANCH.split("/")[1]}"
 		    }
 		    timeout(time: 2, unit: 'MINUTES') {
 	        	script {
@@ -48,6 +48,18 @@ pipeline {
 		}
       }
     }
+    
+    stage('Vulnerability Scan - Docker ') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
+    
 	stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
