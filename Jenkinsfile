@@ -60,9 +60,7 @@ pipeline {
           sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
         }
       }
-	}
-	stage('Public Reports') {
-	  post {
+      post {
 	    always {
 	      junit 'target/surefire-reports/*.xml'
 	      jacoco execPattern: 'target/jacoco.exec'
@@ -78,6 +76,6 @@ pipeline {
 	
 	    // }
 	  }
-	}   
+	}
   }  
 }
