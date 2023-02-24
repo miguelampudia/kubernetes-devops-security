@@ -4,8 +4,9 @@ metadata:
   labels:
     app: devsecops
   name: devsecops
+  namespace: devsecops
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: devsecops
@@ -25,6 +26,7 @@ metadata:
   labels:
     app: devsecops
   name: devsecops-svc
+  namespace: devsecops
 spec:
   ports:
   - port: 8080
