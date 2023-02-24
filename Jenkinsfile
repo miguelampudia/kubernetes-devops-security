@@ -38,7 +38,7 @@ pipeline {
       steps {
       	withEnv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
 			withSonarQubeEnv('sonarqube.ampudiacompany') {
-	        	sh "mvn clean sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.branch.name=${env.GIT_BRANCH.split("/")[1]}"
+	        	sh "mvn clean sonar:sonar -Dsonar.projectKey=numeric-application"
 		    }
 		    timeout(time: 2, unit: 'MINUTES') {
 	        	script {
