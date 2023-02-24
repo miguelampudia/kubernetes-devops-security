@@ -100,21 +100,15 @@ pipeline {
           },
           "Kubesec Scan": {
             sh "bash /home/jenkins/kubesec-scan.sh"
+          },
+          "Trivy Scan": {
+            sh "bash /home/jenkins/trivy-k8s-scan.sh"
           }
         )
       }
     }
 	
 		
-	//stage('Kubernetes Deployment - DEV') {
-    //  steps {
-    //    withKubeConfig([credentialsId: 'kubeconfig']) {
-    //      sh "sed -i 's#replace#mampudia/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-    //      sh "kubectl apply -f k8s_deployment_service.yaml -n devsecops"
-    //    }
-    //  }
-	//}
-	
 	stage('K8S Deployment - DEV') {
       steps {
         parallel(
