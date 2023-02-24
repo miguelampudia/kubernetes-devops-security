@@ -30,16 +30,14 @@ pipeline {
 	}
 	stage('SonarQube - SAST') {
       steps {
-      	withEnv(['SONAR_SCANNER_OPTS=-Djavax.net.ssl.trustStore=/var/jenkins_home/certificates/cacerts -Djavax.net.ssl.trustStorePassword=changeit']){
-			withSonarQubeEnv('sonarqube.ampudiacompany') {
-	        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-		    }
-		    timeout(time: 2, unit: 'MINUTES') {
-	        	script {
-	            	waitForQualityGate abortPipeline: true
-	  			}
-	        }
-		}
+		withSonarQubeEnv('sonarqube.ampudiacompany') {
+        	sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
+	    }
+	    timeout(time: 2, unit: 'MINUTES') {
+        	script {
+            	waitForQualityGate abortPipeline: true
+  			}
+        }
       }
     }
     
@@ -56,7 +54,7 @@ pipeline {
             sh "mvn dependency-check:check"
           },
           "Trivy Scan": {
-            sh "bash trivy-docker-image-scan.sh"
+            sh "bash /home/jenkins/agent/trivy-docker-image-scan.sh"
           }
         )
       }
