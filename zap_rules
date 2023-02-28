@@ -4,3 +4,6 @@
 # Only the rule identifiers are used - the names are just for info
 # You can add your own messages to each rule by appending them after a tab on each line.
 10035	IGNORE	https://udemy-devsecops.ampudiacompany.com/numeric/
+100000	IGNORE	https://udemy-devsecops.ampudiacompany.com/numeric/
+100001	IGNORE	https://udemy-devsecops.ampudiacompany.com/numeric/
+40025	IGNORE	https://udemy-devsecops.ampudiacompany.com/numeric/
