@@ -147,13 +147,15 @@ pipeline {
           			sh 'bash zap.sh'
         		}
       		}
+      		post {
+      			publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
+      		}
     	}
 	}
   	post {
   		always {
     		junit 'target/surefire-reports/*.xml'
       		jacoco execPattern: 'target/jacoco.exec'
-      		publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP ZAP HTML Report', reportTitles: 'OWASP ZAP HTML Report', useWrapperFileDirectly: true])
     	}
 	    // success {
 	
