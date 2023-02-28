@@ -139,6 +139,9 @@ pipeline {
 		    }
 		}
 		stage('OWASP ZAP - DAST') {
+			agent { 
+	      		label 'builnode'
+	      	}
       		steps {
         		withKubeConfig([credentialsId: 'kubeconfig']) {
           			sh 'bash zap.sh'
