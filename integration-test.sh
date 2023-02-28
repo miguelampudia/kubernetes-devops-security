@@ -13,7 +13,7 @@ if [[ ! -z "$PORT" ]];
 then
 
     response=$(curl -s --insecure $applicationURL$applicationURI)
-    http_code=$(curl -s -o /dev/null -w --insecure "%{http_code}" $applicationURL$applicationURI)
+    http_code=$(curl -s -o /dev/null -w "%{http_code}" --insecure $applicationURL$applicationURI)
 
     if [[ "$response" == 100 ]];
         then
