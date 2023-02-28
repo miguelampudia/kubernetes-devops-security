@@ -1,3 +1,5 @@
+@Library('slack') _
+
 pipeline {
 	agent { label 'maven' }
 	environment {
@@ -160,10 +162,11 @@ pipeline {
       		}
     	}
 	}
-  	//post {
-  		//always {
-    		
-    	//}
+  	post {
+  		always {
+    		// Use sendNotifications.groovy from shared library and provide current build result as parameter    
+      		sendNotification currentBuild.result
+    	}
 	    // success {
 	
 	    // }
@@ -171,5 +174,5 @@ pipeline {
 	    // failure {
 	
 	    // }
-	//} 
+	} 
 }
