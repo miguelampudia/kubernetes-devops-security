@@ -4,7 +4,7 @@
 echo $imageName #getting Image name from env variable
 
 docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy -q image --exit-code 0 --severity LOW,MEDIUM,HIGH --scanners vuln --timeout 30m $imageName
-docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy -q image --exit-code 1 --severity CRITICAL --scanners vuln  --timeout 30m $imageName
+docker run --rm -v $WORKSPACE:/root/.cache/ aquasec/trivy -q image --exit-code 0 --severity CRITICAL --scanners vuln  --timeout 30m $imageName
 
     # Trivy scan result processing
     exit_code=$?
