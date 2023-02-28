@@ -50,13 +50,14 @@ pipeline {
 	        	}
 	      	}
 	    }
+	    
 	    stage('Vulnerability Scan - Docker') {
-	    	//agent { 
-	      	//	label 'builnode'
-	      	//}
+	    	agent { 
+	      		label 'builnode'
+	      	}
 	     	steps {
 	        	parallel(
-		          	"Dependency Scan": {
+	        		"Dependency Scan": {
 		            	sh "mvn dependency-check:check"
 		          	},
 		          	"Trivy Scan": {
@@ -82,18 +83,22 @@ pipeline {
 	          		sh 'docker push mampudia/numeric-app:""$GIT_COMMIT""'
 	        	}
 	      	}
-		  }
+		}
+		
+		stage('kubesec Scan - Kubernetes') {
+	      	steps {
+	        	sh "bash kubesec-scan.sh"
+	      	}
+	    }
+	    
 		stage('Vulnerability Scan - Kubernetes') {
-			//agent { 
-	      	//	label 'builnode'
-	      	//}
+			agent { 
+	      		label 'builnode'
+	      	}
 	      	steps {
 	        	parallel(
 	          		"OPA Scan": {
 	          			sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
-	          		},
-	          		"Kubesec Scan": {
-	            		sh "bash kubesec-scan.sh"
 	          		},
 	          		"Trivy Scan": {
 	            		sh "bash trivy-k8s-scan.sh"
