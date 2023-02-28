@@ -111,7 +111,7 @@ pipeline {
 	        	parallel(
 	          		"Deployment": {
 	            		withKubeConfig([credentialsId: 'kubeconfig']) {
-	              			sh "kubectl -n $namespaceName apply -f k8s_deployment_service.yaml"
+	              			sh "bash k8s-deployment.sh"
 	            		}
 	          		},
 	          		"Rollout Status": {
