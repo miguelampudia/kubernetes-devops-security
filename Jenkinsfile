@@ -169,6 +169,9 @@ pipeline {
 			}
 		}
 		stage('K8S CIS Benchmark') {
+			agent { 
+	      		label 'builnode'
+	      	}
 	     	steps {
 	        	script {
 	          		parallel(
