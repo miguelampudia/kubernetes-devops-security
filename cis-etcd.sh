@@ -5,7 +5,7 @@ json_file=$(kube-bench run --targets etcd  --version 1.15 --check 2.2 --json)
 echo $json_file
 total_fail=$(echo $json_file | jq .Totals.total_fail)
 #if [[ "$total_fail" -ne 0 ]];
-if [[ "$total_fail" -gt 0 ]];
+if [[ "$total_fail" -lt 0 ]];
         then
                 echo "CIS Benchmark Failed ETCD while testing for 2.2"
                 exit 1;
