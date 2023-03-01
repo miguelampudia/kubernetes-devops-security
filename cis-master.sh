@@ -1,6 +1,6 @@
 #!/bin/bash
 #cis-master.sh
-total_fail=$(docker run --rm -v `pwd`:/host docker.io/aquasec/kube-bench:latest run --targets master  --version 1.15 --check 1.2.7,1.2.8,1.2.9 --json | jq .[].total_fail)
+total_fail=$(docker run --rm -v `pwd`:/host docker.io/aquasec/kube-bench:latest master  --version 1.15 --check 1.2.7,1.2.8,1.2.9 --json | jq .[].total_fail)
 #total_fail=$(kube-bench master  --version 1.15 --check 1.2.7,1.2.8,1.2.9 --json | jq .[].total_fail)
 
 if [[ "$total_fail" -ne 0 ]];
