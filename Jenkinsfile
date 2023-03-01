@@ -173,19 +173,21 @@ pipeline {
 	      		label 'builnode'
 	      	}
 	     	steps {
-	        	script {
-	          		parallel(
-	            		"Master": {
-	              			sh "bash cis-master.sh"
-	            		},
-	            		"Etcd": {
-	              			sh "bash cis-etcd.sh"
-	            		},
-	            		"Kubelet": {
-	              			sh "bash cis-kubelet.sh"
-	            		}
-	          		)
-	        	}
+	     		withKubeConfig([credentialsId: 'kubeconfig']) {
+	     			script {
+		          		parallel(
+		            		"Master": {
+		              			sh "bash cis-master.sh"
+		            		},
+		            		"Etcd": {
+		              			sh "bash cis-etcd.sh"
+		            		},
+		            		"Kubelet": {
+		              			sh "bash cis-kubelet.sh"
+		            		}
+		          		)
+	        		}
+	     		}
 	      	}
 	    }
 	}
