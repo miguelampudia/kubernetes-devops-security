@@ -9,6 +9,7 @@ pipeline {
 	    serviceName = "devsecops-svc"
 	    imageName = "mampudia/numeric-app:${GIT_COMMIT}"
 	    applicationURL = "https://udemy-devsecops.ampudiacompany.com/numeric"
+	    applicationURLProd = "http://192.168.1.54"
 	    applicationURI = "/increment/99"
 	}
 	stages {
@@ -207,6 +208,22 @@ pipeline {
 	        	)
 	    	}
 	    }
+	    stage('Integration Tests - PROD') {
+			steps {
+		      	script {
+		        	try {
+		            	withKubeConfig([credentialsId: 'kubeconfig']) {
+		              		sh "bash integration-test-PROD.sh"
+		            	}
+		          	} catch (e) {
+		            	withKubeConfig([credentialsId: 'kubeconfig']) {
+		              		sh "kubectl -n prod rollout undo deploy ${deploymentName}"
+		            	}
+		            	throw e
+		        	}
+		    	}
+			}
+		}
 	}
   	post {
   		always {
