@@ -58,9 +58,9 @@ pipeline {
 	}
 	stages {
 		stage('Testing Slack - Error Stage') {
-	      steps {
-	        sh 'exit 1'
-	      }
+	    	steps {
+	        	sh 'exit 1'
+	      	}
 	    }
 	  	stage ('Parameters') {
 	        steps {
@@ -287,7 +287,6 @@ pipeline {
 		        sendNotification currentBuild.result
 		      }
 	    }
-	
 	    failure {
 	    	script {
 	        	//Fetch information about  failed stage
