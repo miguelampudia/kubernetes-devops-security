@@ -57,6 +57,11 @@ pipeline {
 	    applicationURI = "/increment/99"
 	}
 	stages {
+		stage('Testing Slack - Error Stage') {
+	      steps {
+	        sh 'exit 0'
+	      }
+	    }
 	  	stage ('Parameters') {
 	        steps {
 	            echo '---Parameters GIT HUB'
