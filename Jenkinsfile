@@ -57,17 +57,17 @@ pipeline {
 	    applicationURI = "/increment/99"
 	}
 	stages {
-		stage('Testing Slack - Error Stage') {
-	    	steps {
-	        	sh 'exit 1'
-	      	}
-	    }
 	  	stage ('Parameters') {
 	        steps {
 	            echo '---Parameters GIT HUB'
 	            echo "BRANCH_NAME: ${env.GIT_BRANCH.split("/")[1]}"
 	            sh "pwd"
 	        }
+	    }
+	    stage('Testing Slack - Error Stage') {
+	    	steps {
+	        	sh 'exit 1'
+	      	}
 	    }
 	  	stage('Build Artifact') {
 	        steps {
