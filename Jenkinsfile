@@ -57,9 +57,9 @@ pipeline {
 	    applicationURI = "/increment/99"
 	}
 	stages {
-		stage('Testing Slack - Error Stage') {
+		stage('Testing Slack - Error Stage - exit 1') {
 	    	steps {
-	        	sh 'exit 1'
+	        	sh 'exit 0'
 	      	}
 	    }
 	  	stage ('Parameters') {
