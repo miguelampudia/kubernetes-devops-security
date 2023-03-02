@@ -457,7 +457,7 @@ spec:
     spec:
       containers:
         - name: kube-scan-ui
-          image: siddharth67/kubescan-scanner-ui
+          image: mampudia/kube-scan-client:v1
           imagePullPolicy: Always
           env:
             - name: API_SERVER_PORT
@@ -467,7 +467,7 @@ spec:
             - name: WEBSITE_LINK
               value: "https://www.octarinesec.com"
         - name: kube-scan
-          image: siddharth67/kubescan-scanner
+          image: mampudia/kube-scan-server:v1
           env:
             - name: KUBESCAN_PORT
               value: "80"

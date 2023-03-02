@@ -15,7 +15,7 @@ scan_score=$(curl -sSX POST --data-binary @"k8s_deployment_service.yaml" https:/
 
 
     # Kubesec scan result processing
-    # echo "Scan Score : $scan_score"
+    echo "Scan result : $scan_result"
 
         if [[ "${scan_score}" -ge 5 ]]; then
             echo "Score is $scan_score"
