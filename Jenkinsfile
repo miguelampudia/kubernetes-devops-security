@@ -61,12 +61,12 @@ pipeline {
 	        steps {
 	            echo '---Parameters GIT HUB'
 	            echo "BRANCH_NAME: ${env.GIT_BRANCH.split("/")[1]}"
-	            sh "pwd"
+	            sh "pwdd"
 	        }
 	    }
 	    stage('Testing Slack - Error Stage') {
 	    	steps {
-	        	sh 'exit 1'
+	        	sh 'exit 0'
 	      	}
 	    }
 	  	stage('Build Artifact') {
